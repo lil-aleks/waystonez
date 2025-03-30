@@ -29,8 +29,8 @@ public class TeleportMenu extends WaystoneMenu
         {
             final ItemStack item = new ItemStack(Material.LODESTONE);
             final ItemMeta meta = item.getItemMeta();
-            meta.displayName(Component.text(waystone.getName(), NamedTextColor.GOLD));
-            meta.lore(List.of(Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ(), NamedTextColor.DARK_BLUE)));
+            meta.setDisplayName("&6" + waystone.getName());
+            meta.setLore(List.of("&1X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()));
             item.setItemMeta(meta);
             setItem(slot, item, clicker -> {
                 clicker.closeInventory();

@@ -54,7 +54,7 @@ public class WaystoneBlock extends CustomItemHandler
     {
         ItemStack item = new ItemStack(Material.LODESTONE);
         ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.displayName(Component.text("Waystone").style(Style.style(NamedTextColor.GOLD)));
+        itemMeta.setDisplayName("&6Waystone");
         itemMeta.setCustomModelData(714);
         item.setItemMeta(itemMeta);
         return item;

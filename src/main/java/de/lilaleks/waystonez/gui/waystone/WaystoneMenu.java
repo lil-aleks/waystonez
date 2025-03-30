@@ -19,7 +19,7 @@ public class WaystoneMenu implements Menu
 
     public WaystoneMenu(int size)
     {
-        this.inventory = Bukkit.createInventory(this, size, Component.text("Waystone"));
+        this.inventory = Bukkit.createInventory(this, size, "Waystone");
     }
 
     @Override

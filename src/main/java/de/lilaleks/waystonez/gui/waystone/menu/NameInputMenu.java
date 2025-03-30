@@ -33,12 +33,12 @@ public class NameInputMenu extends WaystoneMenu
     {
         final ItemStack nameItem = new ItemStack(Material.PAPER);
         final ItemMeta itemMeta = nameItem.getItemMeta();
-        itemMeta.displayName(Component.text("Rename Waypoint"));
+        itemMeta.setDisplayName("Rename Waypoint");
         nameItem.setItemMeta(itemMeta);
         setItem(5, nameItem, player ->
         {
             player.closeInventory();
-            player.sendMessage(Component.text("Type the name for your waystone in chat:"));
+            player.sendMessage("Type the name for your waystone in chat:");
             Bukkit.getPluginManager().registerEvents(new Listener()
             {
                 @EventHandler
