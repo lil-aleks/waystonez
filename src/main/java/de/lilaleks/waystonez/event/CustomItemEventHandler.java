@@ -1,17 +1,17 @@
 package de.lilaleks.waystonez.event;
 
-import de.lilaleks.waystonez.block.CustomItemHandler;
-import org.bukkit.entity.Player;
+import de.lilaleks.waystonez.custom.CustomItemHandler;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -78,21 +78,12 @@ public class CustomItemEventHandler implements Listener
     }
 
 
-    private boolean areItemsSimilarIgnoreDurability(ItemStack item1, ItemStack item2)
-    {
+    private boolean areItemsSimilarIgnoreDurability(ItemStack item1, ItemStack item2) {
         if (item1 == null || item2 == null)
             return false;
         if (!item1.getType().equals(item2.getType()))
             return false;
-        if (!(item1.getItemMeta() instanceof Damageable))
-            return false;
-        Damageable meta1 = (Damageable) item1.getItemMeta();
-        meta1.setDamage(0);
 
-        Damageable meta2 = (Damageable) item2.getItemMeta();
-        meta2.setDamage(0);
-        item1.setItemMeta(meta1);
-        item2.setItemMeta(meta2);
-        return item1.isSimilar(item2);
+        return item1.getItemMeta().getCustomModelData() == item2.getItemMeta().getCustomModelData();
     }
 }

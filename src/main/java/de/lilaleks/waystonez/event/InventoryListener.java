@@ -5,16 +5,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 public class InventoryListener implements Listener
 {
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onClick(InventoryClickEvent event)
+    {
         final Inventory inventory = event.getClickedInventory();
-        if (inventory == null) return;
-        if (!(inventory.getHolder() instanceof Menu menu)) return;
+        if (inventory == null)
+            return;
+        if (!(inventory.getHolder() instanceof Menu menu))
+            return;
         event.setCancelled(true);
         menu.click((Player) event.getWhoClicked(), event.getSlot());
+    }
+
+    @EventHandler
+    public void onClose(InventoryCloseEvent event)
+    {
+        final Inventory inventory = event.getInventory();
+        if (!(inventory.getHolder() instanceof Menu menu))
+            return;
+        menu.close(event);
     }
 }

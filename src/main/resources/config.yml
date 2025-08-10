@@ -1,0 +1,11 @@
+database:
+  # The type of database to use (sqlite or mysql)
+  type: sqlite
+
+  # MySQL settings (only used if type is mysql)
+  #mysql:
+  #  host: localhost
+  #  port: 3306
+  #  database: waystones
+  #  username: root
+  #  password: password

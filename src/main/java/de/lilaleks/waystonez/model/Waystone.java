@@ -2,7 +2,6 @@ package de.lilaleks.waystonez.model;
 
 import org.bukkit.Location;
 
-import java.util.UUID;
 
 public class Waystone
 {
@@ -10,16 +9,16 @@ public class Waystone
     private int id;
     private String name;
     private Location location;
-    private UUID ownerId;
+    private String ownerId;
 
-    public Waystone(String name, Location location, UUID ownerId)
+    public Waystone(String name, Location location, String ownerId)
     {
         this.name = name;
         this.location = location;
         this.ownerId = ownerId;
     }
 
-    public Waystone(int id, String name, Location location, UUID ownerId)
+    public Waystone(int id, String name, Location location, String ownerId)
     {
         this.id = id;
         this.name = name;
@@ -61,12 +60,12 @@ public class Waystone
                 location.getBlockZ());
     }
 
-    public UUID getOwnerId()
+    public String getOwnerId()
     {
         return ownerId;
     }
 
-    public void setOwnerId(UUID ownerId)
+    public void setOwnerId(String ownerId)
     {
         this.ownerId = ownerId;
     }

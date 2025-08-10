@@ -1,16 +1,16 @@
-package de.lilaleks.waystonez.block.custom;
+package de.lilaleks.waystonez.custom.block;
 
 import de.lilaleks.waystonez.Waystonez;
-import de.lilaleks.waystonez.block.CustomItemHandler;
-import de.lilaleks.waystonez.gui.waystone.WaystoneMenu;
+import de.lilaleks.waystonez.custom.CustomItemHandler;
 import de.lilaleks.waystonez.gui.waystone.menu.NameInputMenu;
 import de.lilaleks.waystonez.gui.waystone.menu.TeleportMenu;
 import de.lilaleks.waystonez.model.Waystone;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,27 +22,47 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.inject.Named;
 import java.util.Optional;
 
 public class WaystoneBlock extends CustomItemHandler
 {
     public final JavaPlugin plugin;
+    public static ItemStack ITEM_STACK = null;
 
     public WaystoneBlock(JavaPlugin plugin)
     {
         this.plugin = plugin;
 
+        ItemStack item = new ItemStack(Material.LODESTONE);
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.displayName(Component.text("Waystone").color(NamedTextColor.GOLD));
+        itemMeta.setCustomModelData(714);
+        item.setItemMeta(itemMeta);
+        ITEM_STACK = item;
+
         plugin.getServer().getPluginManager().registerEvents(new Listener()
         {
             @EventHandler
-            public void onClick(PlayerInteractEvent event) {
-                if (event.getClickedBlock() == null) return;
-                if (event.getClickedBlock().getBlockData().getMaterial() != Material.LODESTONE) return;
+            public void onClick(PlayerInteractEvent event)
+            {
+                if (event.getClickedBlock() == null)
+                    return;
+                if (event.getClickedBlock().getBlockData().getMaterial() != Material.LODESTONE)
+                    return;
+                if (!event.getAction().isRightClick())
+                    return;
                 Optional<Waystone> waystone = Waystonez.databaseManager.getWaystoneAtLocation(event.getClickedBlock().getLocation());
-                if (!waystone.isPresent()) return;
-                if (!Waystonez.databaseManager.getPlayerWaystones(event.getPlayer().getUniqueId()).contains(waystone.get())) {
-                    Waystonez.databaseManager.addDiscoveredWaystone(event.getPlayer().getUniqueId(), waystone.get().getId());
-                } else {
+                if (waystone.isEmpty())
+                    return;
+                if (!Waystonez.databaseManager.playerHasWaystone(event.getPlayer().getUniqueId().toString(), waystone.get().getId()))
+                {
+                    event.getPlayer().sendMessage(Component.text("You discovered ").color(NamedTextColor.GREEN).append(Component.text(waystone.get().getName()).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.YELLOW)).append(Component.text(".").color(NamedTextColor.GREEN)));
+                    Waystonez.databaseManager.addDiscoveredWaystone(event.getPlayer().getUniqueId().toString(), waystone.get().getId());
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
+                } else
+                {
                     new TeleportMenu(event.getPlayer()).open(event.getPlayer());
                 }
             }
@@ -52,12 +72,8 @@ public class WaystoneBlock extends CustomItemHandler
     @Override
     public ItemStack getItemStack()
     {
-        ItemStack item = new ItemStack(Material.LODESTONE);
-        ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName("&6Waystone");
-        itemMeta.setCustomModelData(714);
-        item.setItemMeta(itemMeta);
-        return item;
+
+        return ITEM_STACK;
     }
 
     @Override
@@ -66,12 +82,13 @@ public class WaystoneBlock extends CustomItemHandler
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "waystone"), getItemStack());
 
         recipe.shape(
-                        "SSS",
-                        "SCS",
+                        "SAS",
+                        "ACA",
                         "SES"
                 ).setIngredient('S', Material.STONE_BRICKS)
                 .setIngredient('E', Material.ENDER_PEARL)
-                .setIngredient('C', Material.COMPASS);
+                .setIngredient('C', Material.COMPASS)
+                .setIngredient('A', Material.AMETHYST_SHARD);
 
         return recipe;
     }
@@ -87,7 +104,8 @@ public class WaystoneBlock extends CustomItemHandler
     {
         Optional<Waystone> waystone = Waystonez.databaseManager.getWaystoneAtLocation(event.getBlock().getLocation());
 
-        if (waystone.get().getOwnerId() != event.getPlayer().getUniqueId())
+        // isPresent is not needed. if you get an error your server is broken
+        if (!waystone.get().getOwnerId().equals(event.getPlayer().getUniqueId().toString()))
         {
             event.setCancelled(true);
             return;

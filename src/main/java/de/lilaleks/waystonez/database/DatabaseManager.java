@@ -109,7 +109,7 @@ public class DatabaseManager
             statement.setDouble(3, waystone.getLocation().getX());
             statement.setDouble(4, waystone.getLocation().getY());
             statement.setDouble(5, waystone.getLocation().getZ());
-            statement.setString(6, waystone.getOwnerId().toString());
+            statement.setString(6, waystone.getOwnerId());
 
             statement.executeUpdate();
 
@@ -133,6 +133,7 @@ public class DatabaseManager
 
     public void deleteWaystone(int id)
     {
+        // delete waystone by id
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM waystones WHERE id = ?"))
         {
             statement.setInt(1, id);
@@ -143,13 +144,14 @@ public class DatabaseManager
         }
     }
 
-    public void addDiscoveredWaystone(UUID playerUUID, int waystoneId)
+    public void addDiscoveredWaystone(String playerUUID, int waystoneId)
     {
+        // set waystone as discovered for a player
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT OR IGNORE INTO player_waystones (player_uuid, waystone_id) VALUES (?, ?)"))
         {
 
-            statement.setString(1, playerUUID.toString());
+            statement.setString(1, playerUUID);
             statement.setInt(2, waystoneId);
 
             statement.executeUpdate();
@@ -159,7 +161,7 @@ public class DatabaseManager
         }
     }
 
-    public List<Waystone> getPlayerWaystones(UUID playerUUID)
+    public List<Waystone> getPlayerWaystones(String playerUUID)
     {
         List<Waystone> waystones = new ArrayList<>();
 
@@ -169,7 +171,7 @@ public class DatabaseManager
                         "WHERE pw.player_uuid = ?"))
         {
 
-            statement.setString(1, playerUUID.toString());
+            statement.setString(1, playerUUID);
 
             try (ResultSet resultSet = statement.executeQuery())
             {
@@ -251,6 +253,28 @@ public class DatabaseManager
 
         Location location = new Location(world, x, y, z);
 
-        return new Waystone(id, name, location, ownerUUID);
+        return new Waystone(id, name, location, ownerUUID.toString());
+    }
+
+    public boolean playerHasWaystone(String uniqueId, int id)
+    {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM player_waystones WHERE player_uuid = ? AND waystone_id = ?"))
+        {
+
+            statement.setString(1, uniqueId.toString());
+            statement.setDouble(2, id);
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    return true;
+                }
+            }
+        } catch (SQLException e)
+        {
+            plugin.getLogger().severe("Error while checking if player has waystone: " + e.getMessage());
+        }
+        return false;
     }
 }
