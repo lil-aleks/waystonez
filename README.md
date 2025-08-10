@@ -14,7 +14,7 @@ Waystonez is a simple Minecraft plugin which adds waystones to your minecraft wo
 - Teleportation requires xp (optional in config).
 - Customizable wand durability in the config.
 
-Requests for some features can be done on my discord server.
+Requests for some features can be done on my [discord server](https://discord.gg/MD7dQgscej).
 
 ## Installation
 
