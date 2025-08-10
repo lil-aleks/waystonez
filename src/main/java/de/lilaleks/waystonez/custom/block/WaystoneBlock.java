@@ -2,8 +2,6 @@ package de.lilaleks.waystonez.custom.block;
 
 import de.lilaleks.waystonez.Waystonez;
 import de.lilaleks.waystonez.custom.CustomItemHandler;
-import de.lilaleks.waystonez.gui.waystone.menu.NameInputMenu;
-import de.lilaleks.waystonez.gui.waystone.menu.TeleportMenu;
 import de.lilaleks.waystonez.model.Waystone;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
