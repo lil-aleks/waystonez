@@ -4,6 +4,8 @@ import de.lilaleks.waystonez.custom.block.WaystoneBlock;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.DialogBase;
 import io.papermc.paper.registry.data.dialog.action.DialogAction;
@@ -15,6 +17,8 @@ import io.papermc.paper.registry.keys.DialogKeys;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +37,7 @@ public class WaystonezBootstrap implements PluginBootstrap
                                 .base(DialogBase.builder(Component.text("Waystones").color(NamedTextColor.DARK_PURPLE))
                                         .canCloseWithEscape(false)
                                         .body(List.of(
-                                                DialogBody.item(WaystoneBlock.ITEM_STACK, null, true, true, 100, 100),
+                                                DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
                                                 DialogBody.plainMessage(Component.text("How would you like to call your waypoint?"))
                                         ))
                                         .inputs(List.of(
@@ -56,12 +60,11 @@ public class WaystonezBootstrap implements PluginBootstrap
                                         )
                                 ))
                 )));
-
     }
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context)
     {
-        return PluginBootstrap.super.createPlugin(context);
+        return new Waystonez();
     }
 }

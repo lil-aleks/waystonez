@@ -1,9 +1,19 @@
 package de.lilaleks.waystonez.event.dialog;
 
+import de.lilaleks.waystonez.Waystonez;
+import de.lilaleks.waystonez.custom.block.WaystoneBlock;
+import de.lilaleks.waystonez.model.Waystone;
 import io.papermc.paper.connection.PlayerGameConnection;
 import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.event.player.PlayerCustomClickEvent;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,8 +35,25 @@ public class NameInputDialogEvents implements Listener
             if (event.getCommonConnection() instanceof PlayerGameConnection conn)
             {
                 Player player = conn.getPlayer();
+                Block block = player.getTargetBlockExact(10);
+                Waystonez.databaseManager.saveWaystone(new Waystone(name, block.getLocation(), player.getUniqueId().toString()));
+                player.sendMessage(Component.text("You named your waytone: ").color(NamedTextColor.GREEN).append(Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
+                player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 0.5f);
+                player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 0.5f);
+                player.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 0.5, 0.5), 50, 0.5, 0.5, 0.5, 0.5);
+                player.getWorld().spawnParticle(Particle.END_ROD, block.getLocation().add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5, 0.1);
 
             }
+        } else if (event.getIdentifier().equals(Key.key("waystonez:name_input/cancel")))
+        {
+            if (event.getCommonConnection() instanceof PlayerGameConnection conn)
+            {
+                Player player = conn.getPlayer();
+                Block block = player.getTargetBlockExact(10);
+                block.getWorld().dropItemNaturally(block.getLocation(), WaystoneBlock.ITEM_STACK);
+                block.setType(Material.AIR);
+            }
+
         }
     }
 }

@@ -1,7 +1,6 @@
 package de.lilaleks.waystonez.custom.item;
 
 import de.lilaleks.waystonez.custom.CustomItemHandler;
-import de.lilaleks.waystonez.gui.waystone.menu.TeleportMenu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -79,6 +78,6 @@ public class WaystoneWand extends CustomItemHandler
             }
             );
         }
-        new TeleportMenu(event.getPlayer()).open(event.getPlayer());
+        //new TeleportMenu(event.getPlayer()).open(event.getPlayer());
     }
 }

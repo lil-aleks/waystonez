@@ -3,6 +3,11 @@ package de.lilaleks.waystonez.custom.block;
 import de.lilaleks.waystonez.Waystonez;
 import de.lilaleks.waystonez.custom.CustomItemHandler;
 import de.lilaleks.waystonez.model.Waystone;
+import de.lilaleks.waystonez.util.WaystoneDialogs;
+import io.papermc.paper.dialog.Dialog;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -18,9 +23,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.inject.Named;
+import java.util.List;
 import java.util.Optional;
 
 public class WaystoneBlock extends CustomItemHandler
@@ -35,7 +41,9 @@ public class WaystoneBlock extends CustomItemHandler
         ItemStack item = new ItemStack(Material.LODESTONE);
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.displayName(Component.text("Waystone").color(NamedTextColor.GOLD));
-        itemMeta.setCustomModelData(714);
+        CustomModelDataComponent comp = itemMeta.getCustomModelDataComponent();
+        comp.setStrings(List.of("waystonez:waystone"));
+        itemMeta.setCustomModelDataComponent(comp);
         item.setItemMeta(itemMeta);
         ITEM_STACK = item;
 
@@ -61,7 +69,7 @@ public class WaystoneBlock extends CustomItemHandler
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                 } else
                 {
-                    new TeleportMenu(event.getPlayer()).open(event.getPlayer());
+                    //new TeleportMenu(event.getPlayer()).open(event.getPlayer());
                 }
             }
         }, plugin);
@@ -94,7 +102,8 @@ public class WaystoneBlock extends CustomItemHandler
     @Override
     public void onPlace(BlockPlaceEvent event)
     {
-        new NameInputMenu(event.getBlock(), plugin).open(event.getPlayer());
+        assert WaystoneDialogs.NAME_INPUT != null;
+        event.getPlayer().showDialog(WaystoneDialogs.NAME_INPUT);
     }
 
     @Override

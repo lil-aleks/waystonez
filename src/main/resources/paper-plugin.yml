@@ -1,5 +1,6 @@
 name: Waystonez
 version: '1.21.6-1.0'
 main: de.lilaleks.waystonez.Waystonez
+bootstrapper: de.lilaleks.waystonez.WaystonezBootstrap
 api-version: '1.21'
 authors: ['lil_Aleks']

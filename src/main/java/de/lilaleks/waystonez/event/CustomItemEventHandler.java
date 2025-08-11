@@ -84,6 +84,6 @@ public class CustomItemEventHandler implements Listener
         if (!item1.getType().equals(item2.getType()))
             return false;
 
-        return item1.getItemMeta().getCustomModelData() == item2.getItemMeta().getCustomModelData();
+        return item1.getItemMeta().getCustomModelDataComponent().getStrings().equals(item2.getItemMeta().getCustomModelDataComponent().getStrings());
     }
 }
