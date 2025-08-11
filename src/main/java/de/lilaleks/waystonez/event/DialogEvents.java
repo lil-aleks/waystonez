@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Optional;
+
 public class DialogEvents implements Listener
 {
     @EventHandler
@@ -54,8 +56,24 @@ public class DialogEvents implements Listener
                 block.setType(Material.AIR);
             }
 
-        } else if (event.getIdentifier().key().asString().startsWith("waystonez:teleport/")) {
+        } else if (event.getIdentifier().key().asString().startsWith("waystonez:teleport/"))
+        {
             int id = Integer.parseInt(event.getIdentifier().key().asString().substring("waystonez:teleport/".length()));
+
+            if (event.getCommonConnection() instanceof PlayerGameConnection conn)
+            {
+                Player player = conn.getPlayer();
+                Optional<Waystone> waystone = Waystonez.databaseManager.getWaystone(id);
+                if (waystone.isPresent()) {
+                    player.teleport(waystone.get().getLocation().add(0.5, 1, 0.5));
+                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 0.8f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.1f, 1.5f);
+                    player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0), 50, 0.5, 1, 0.5, 0.1);
+                    player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation().add(0, 1, 0), 20, 0.5, 1, 0.5, 0.05);
+                }
+
+            }
+
         }
     }
 }
