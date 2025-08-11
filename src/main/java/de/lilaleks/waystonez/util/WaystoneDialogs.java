@@ -52,7 +52,7 @@ public class WaystoneDialogs
         return Dialog.create(builder -> builder.empty()
                 .base(dialogBase.body(List.of(
                         DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
-                        DialogBody.plainMessage(Component.text("How would you like to call your waypoint?"))
+                        DialogBody.plainMessage(Component.text("Where do you want to teleport to?"))
                 )).build())
                 .type(DialogType.multiAction(inputs).build())
         );
