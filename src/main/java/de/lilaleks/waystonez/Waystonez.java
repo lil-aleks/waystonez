@@ -4,10 +4,8 @@ import de.lilaleks.waystonez.custom.block.WaystoneBlock;
 import de.lilaleks.waystonez.custom.item.WaystoneWand;
 import de.lilaleks.waystonez.database.DatabaseManager;
 import de.lilaleks.waystonez.event.CustomItemEventHandler;
-import de.lilaleks.waystonez.event.dialog.NameInputDialogEvents;
+import de.lilaleks.waystonez.event.DialogEvents;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Logger;
 
 public final class Waystonez extends JavaPlugin
 {
@@ -22,7 +20,7 @@ public final class Waystonez extends JavaPlugin
                 new WaystoneBlock(this),
                 new WaystoneWand(this)
         ), this);
-        getServer().getPluginManager().registerEvents(new NameInputDialogEvents(), this);
+        getServer().getPluginManager().registerEvents(new DialogEvents(), this);
     }
 
     @Override

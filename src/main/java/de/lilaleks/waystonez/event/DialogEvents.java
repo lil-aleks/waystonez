@@ -1,4 +1,4 @@
-package de.lilaleks.waystonez.event.dialog;
+package de.lilaleks.waystonez.event;
 
 import de.lilaleks.waystonez.Waystonez;
 import de.lilaleks.waystonez.custom.block.WaystoneBlock;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class NameInputDialogEvents implements Listener
+public class DialogEvents implements Listener
 {
     @EventHandler
     public void handleDialog(PlayerCustomClickEvent event)
@@ -54,6 +54,8 @@ public class NameInputDialogEvents implements Listener
                 block.setType(Material.AIR);
             }
 
+        } else if (event.getIdentifier().key().asString().startsWith("waystonez:teleport/")) {
+            int id = Integer.parseInt(event.getIdentifier().key().asString().substring("waystonez:teleport/".length()));
         }
     }
 }

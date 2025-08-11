@@ -69,7 +69,8 @@ public class WaystoneBlock extends CustomItemHandler
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                 } else
                 {
-                    //new TeleportMenu(event.getPlayer()).open(event.getPlayer());
+                    Dialog dialog = WaystoneDialogs.teleportDialog(event.getPlayer());
+                    event.getPlayer().showDialog(dialog);
                 }
             }
         }, plugin);
