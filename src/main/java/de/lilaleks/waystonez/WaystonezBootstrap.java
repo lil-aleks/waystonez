@@ -38,22 +38,22 @@ public class WaystonezBootstrap implements PluginBootstrap
                                         .canCloseWithEscape(false)
                                         .body(List.of(
                                                 DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
-                                                DialogBody.plainMessage(Component.text("How would you like to call your waypoint?"))
+                                                DialogBody.plainMessage(Component.translatable("dialog.waystone_name.question"))
                                         ))
                                         .inputs(List.of(
-                                                DialogInput.text("name", Component.text("Name")).build()
+                                                DialogInput.text("name", Component.translatable("dialog.waystone_name.question.label")).build()
                                         ))
                                         .build()
                                 )
                                 .type(DialogType.confirmation(
                                         ActionButton.create(
-                                                Component.text("Confirm"),
+                                                Component.translatable("dialog.waystone_name.confirm"),
                                                 null,
                                                 100,
                                                 DialogAction.customClick(Key.key("waystonez:name_input/confirm"), null)
                                         ),
                                         ActionButton.create(
-                                                Component.text("Cancel"),
+                                                Component.translatable("dialog.waystone_name.cancel"),
                                                 null,
                                                 100,
                                                 DialogAction.customClick(Key.key("waystonez:name_input/cancel"), null)

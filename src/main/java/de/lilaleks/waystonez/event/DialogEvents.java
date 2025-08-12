@@ -51,14 +51,14 @@ public class DialogEvents implements Listener
                 {
                     if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
                     {
-                        player.sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                        player.sendMessage(Component.translatable("waystone.limit_reached", NamedTextColor.DARK_RED));
                         block.getWorld().dropItemNaturally(block.getLocation(), WaystoneBlock.ITEM_STACK);
                         block.setType(Material.AIR);
                         return;
                     }
                 }
                 Waystonez.databaseManager.saveWaystone(new Waystone(name, block.getLocation(), player.getUniqueId().toString()));
-                player.sendMessage(Component.text("You named your waytone: ").color(NamedTextColor.GREEN).append(Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
+                player.sendMessage(Component.translatable("waystone.named", NamedTextColor.GREEN, Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
                 player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 0.5f);
                 player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 0.5f);
                 player.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 0.5, 0.5), 50, 0.5, 0.5, 0.5, 0.5);
