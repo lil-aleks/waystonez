@@ -22,6 +22,15 @@ import java.util.Optional;
 
 public class DialogEvents implements Listener
 {
+    private final Waystonez plugin;
+    private final int maxWaystones;
+
+    public DialogEvents(Waystonez plugin)
+    {
+        this.plugin = plugin;
+        maxWaystones = plugin.getConfig().getInt("max_waystones", 0);
+    }
+
     @EventHandler
     public void handleDialog(PlayerCustomClickEvent event)
     {
@@ -38,6 +47,16 @@ public class DialogEvents implements Listener
             {
                 Player player = conn.getPlayer();
                 Block block = player.getTargetBlockExact(10);
+                if (maxWaystones != 0)
+                {
+                    if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
+                    {
+                        player.sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                        block.getWorld().dropItemNaturally(block.getLocation(), WaystoneBlock.ITEM_STACK);
+                        block.setType(Material.AIR);
+                        return;
+                    }
+                }
                 Waystonez.databaseManager.saveWaystone(new Waystone(name, block.getLocation(), player.getUniqueId().toString()));
                 player.sendMessage(Component.text("You named your waytone: ").color(NamedTextColor.GREEN).append(Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
                 player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 0.5f);
@@ -64,7 +83,8 @@ public class DialogEvents implements Listener
             {
                 Player player = conn.getPlayer();
                 Optional<Waystone> waystone = Waystonez.databaseManager.getWaystone(id);
-                if (waystone.isPresent()) {
+                if (waystone.isPresent())
+                {
                     player.teleport(waystone.get().getLocation().add(0.5, 1, 0.5));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 0.8f);
                     player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.1f, 1.5f);

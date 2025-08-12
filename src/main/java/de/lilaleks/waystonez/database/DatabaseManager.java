@@ -144,6 +144,23 @@ public class DatabaseManager
         }
     }
 
+    public int getWaystoneCount()
+    {
+        try (
+                PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM waystones");
+                ResultSet resultSet = statement.executeQuery()
+        )
+        {
+            if (resultSet.next()){
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e)
+        {
+            plugin.getLogger().severe("Error counting waystones: " + e.getMessage());
+        }
+        return 0;
+    }
+
     public void addDiscoveredWaystone(String playerUUID, int waystoneId)
     {
         // set waystone as discovered for a player

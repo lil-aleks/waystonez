@@ -14,13 +14,15 @@ public final class Waystonez extends JavaPlugin
     @Override
     public void onEnable()
     {
+        this.saveDefaultConfig();
+
         databaseManager = new DatabaseManager(this);
         databaseManager.initialize();
         getServer().getPluginManager().registerEvents(new CustomItemEventHandler(this,
                 new WaystoneBlock(this),
-                new WaystoneWand(this)
+                (this.getConfig().getInt("wand_uses", 5) != 0 ? new WaystoneWand(this) : null) // disable wand if no uses
         ), this);
-        getServer().getPluginManager().registerEvents(new DialogEvents(), this);
+        getServer().getPluginManager().registerEvents(new DialogEvents(this), this);
     }
 
     @Override
