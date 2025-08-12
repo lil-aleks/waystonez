@@ -30,12 +30,14 @@ public class NameInputMenu extends WaystoneMenu
 {
     private final Block block;
     private final JavaPlugin plugin;
+    private int maxWaystones;
 
     public NameInputMenu(Block block, JavaPlugin plugin)
     {
         super(9);
         this.block = block;
         this.plugin = plugin;
+        maxWaystones = plugin.getConfig().getInt("max_waystones", 0);
     }
 
     @Override
@@ -62,6 +64,16 @@ public class NameInputMenu extends WaystoneMenu
                     if (event.getPlayer() != player)
                         return;
                     event.setCancelled(true);
+                    if (maxWaystones != 0) {
+                        if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
+                        {
+                            event.getPlayer().sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                            block.getWorld().dropItemNaturally(block.getLocation(), WaystoneBlock.ITEM_STACK);
+                            block.setType(Material.AIR);
+                            HandlerList.unregisterAll(this);
+                            return;
+                        }
+                    }
                     String name = event.getMessage();
                     Waystonez.databaseManager.saveWaystone(new Waystone(name, block.getLocation(), player.getUniqueId().toString()));
                     player.sendMessage(Component.text("You named your waytone: ").color(NamedTextColor.GREEN).append(Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));

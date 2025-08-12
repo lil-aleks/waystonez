@@ -21,28 +21,35 @@ import java.util.List;
 public class WaystoneWand extends CustomItemHandler
 {
     public final JavaPlugin plugin;
+    public static ItemStack ITEM_STACK = null;
+    private int max_uses;
 
     public WaystoneWand(JavaPlugin plugin)
     {
         this.plugin = plugin;
-    }
+        max_uses = plugin.getConfig().getInt("wand_uses", 5);
 
-    @Override
-    public ItemStack getItemStack()
-    {
         ItemStack item = new ItemStack(Material.POISONOUS_POTATO);
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.displayName(Component.text("Waystone Wand").color(NamedTextColor.LIGHT_PURPLE));
         itemMeta.setCustomModelData(714);
         itemMeta.setItemModel(NamespacedKey.minecraft("amethyst_shard"));
-        itemMeta.lore(List.of(Component.text("5").decorate(TextDecoration.BOLD).append(Component.text("/5 uses left")).color(NamedTextColor.GRAY)));
+        itemMeta.lore(List.of(Component.text(max_uses).decorate(TextDecoration.BOLD).append(Component.text("/" + max_uses + " uses left")).color(NamedTextColor.GRAY)));
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(plugin, "uses");
 
-        data.set(key, PersistentDataType.INTEGER, 5);
+        data.set(key, PersistentDataType.INTEGER, max_uses);
 
         item.setItemMeta(itemMeta);
-        return item;
+
+        ITEM_STACK = item;
+    }
+
+    @Override
+    public ItemStack getItemStack()
+    {
+
+        return ITEM_STACK;
     }
 
     @Override
@@ -67,16 +74,18 @@ public class WaystoneWand extends CustomItemHandler
         NamespacedKey key = new NamespacedKey(plugin, "uses");
         int uses = event.getItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
         uses--;
-        if (uses == 0) {
+        if (uses == 0)
+        {
             event.getPlayer().getInventory().remove(event.getItem());
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 0.6f, 0.8f);
-        }
-        else {
+        } else
+        {
             int finalUses = uses;
-            event.getItem().editMeta(itemMeta -> {
-                itemMeta.lore(List.of(Component.text(finalUses).decorate(TextDecoration.BOLD).append(Component.text("/5 uses left")).color(NamedTextColor.GRAY)));
-                itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
-            }
+            event.getItem().editMeta(itemMeta ->
+                    {
+                        itemMeta.lore(List.of(Component.text(finalUses).decorate(TextDecoration.BOLD).append(Component.text("/"+ max_uses +" uses left")).color(NamedTextColor.GRAY)));
+                        itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
+                    }
             );
         }
         new TeleportMenu(event.getPlayer()).open(event.getPlayer());

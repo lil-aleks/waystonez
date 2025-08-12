@@ -29,10 +29,12 @@ public class WaystoneBlock extends CustomItemHandler
 {
     public final JavaPlugin plugin;
     public static ItemStack ITEM_STACK = null;
+    private int maxWaystones;
 
     public WaystoneBlock(JavaPlugin plugin)
     {
         this.plugin = plugin;
+        maxWaystones = plugin.getConfig().getInt("max_waystones", 0);
 
         ItemStack item = new ItemStack(Material.LODESTONE);
         ItemMeta itemMeta = item.getItemMeta();
@@ -96,6 +98,15 @@ public class WaystoneBlock extends CustomItemHandler
     @Override
     public void onPlace(BlockPlaceEvent event)
     {
+        if (maxWaystones != 0)
+        {
+            if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
+            {
+                event.getPlayer().sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                event.setCancelled(true);
+                return;
+            }
+        }
         new NameInputMenu(event.getBlock(), plugin).open(event.getPlayer());
     }
 

@@ -18,7 +18,7 @@ public final class Waystonez extends JavaPlugin
         databaseManager.initialize();
         getServer().getPluginManager().registerEvents(new CustomItemEventHandler(this,
                 new WaystoneBlock(this),
-                new WaystoneWand(this)
+                ( this.getConfig().getInt("wand_uses", 5) != 0 ? new WaystoneWand(this) : null)
         ), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
     }

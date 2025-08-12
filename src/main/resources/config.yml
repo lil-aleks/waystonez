@@ -1,11 +1,5 @@
-database:
-  # The type of database to use (sqlite or mysql)
-  type: sqlite
+# how many times can you use a waystone wand before braking. 0 to disable usage; default: 5
+wand_uses: 5
 
-  # MySQL settings (only used if type is mysql)
-  #mysql:
-  #  host: localhost
-  #  port: 3306
-  #  database: waystones
-  #  username: root
-  #  password: password
+# how many waystones are allowed in your world. 0 for unlimited; default: 0
+max_waystones: 0
