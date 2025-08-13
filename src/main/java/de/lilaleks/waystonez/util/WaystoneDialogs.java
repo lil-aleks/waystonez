@@ -16,6 +16,7 @@ import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.translation.Translatable;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -28,7 +29,38 @@ import java.util.List;
 
 public class WaystoneDialogs
 {
-    public static final Dialog NAME_INPUT = RegistryAccess.registryAccess().getRegistry(RegistryKey.DIALOG).get(Key.key("waystonez:name_input"));
+    public static Dialog nameInputDialog()
+    {
+        Dialog dialog = Dialog.create(
+                builder -> builder.empty()
+                        .base(DialogBase.builder(Component.text("Waystones").color(NamedTextColor.DARK_PURPLE))
+                                .canCloseWithEscape(false)
+                                .body(List.of(
+                                        DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
+                                        DialogBody.plainMessage(Component.translatable("dialog.waystone_name.question", "How would you like to call your waypoint?"))
+                                ))
+                                .inputs(List.of(
+                                        DialogInput.text("name", Component.translatable("dialog.waystone_name.question.label", "Name")).build()
+                                ))
+                                .build()
+                        )
+                        .type(DialogType.confirmation(
+                                ActionButton.create(
+                                        Component.translatable("dialog.waystone_name.confirm", "Confirm"),
+                                        null,
+                                        100,
+                                        DialogAction.customClick(Key.key("waystonez:name_input/confirm"), null)
+                                ),
+                                ActionButton.create(
+                                        Component.translatable("dialog.waystone_name.cancel", "Cancel"),
+                                        null,
+                                        100,
+                                        DialogAction.customClick(Key.key("waystonez:name_input/cancel"), null)
+                                )
+                        ))
+        );
+        return dialog;
+    }
 
     public static Dialog teleportDialog(Player player)
     {
@@ -52,7 +84,7 @@ public class WaystoneDialogs
         return Dialog.create(builder -> builder.empty()
                 .base(dialogBase.body(List.of(
                         DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
-                        DialogBody.plainMessage(Component.translatable("dialog.teleport_question"))
+                        DialogBody.plainMessage(Component.translatable("dialog.teleport_question", "Where do you want to teleport to?"))
                 )).build())
                 .type(DialogType.multiAction(inputs).build())
         );

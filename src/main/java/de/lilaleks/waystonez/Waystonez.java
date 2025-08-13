@@ -6,6 +6,7 @@ import de.lilaleks.waystonez.database.DatabaseManager;
 import de.lilaleks.waystonez.event.CustomItemEventHandler;
 import de.lilaleks.waystonez.event.DialogEvents;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationStore;
 import net.kyori.adventure.util.UTF8ResourceBundleControl;
@@ -33,6 +34,7 @@ public final class Waystonez extends JavaPlugin
         TranslationStore.StringBased<MessageFormat> tStore = TranslationStore.messageFormat(Key.key("waystonez:messages"));
         registerLang(tStore);
         GlobalTranslator.translator().addSource(tStore);
+        getLogger().info(String.valueOf(GlobalTranslator.translator().canTranslate("dialog.teleport_question", Locale.US)));
 
         // Connect with database
         databaseManager = new DatabaseManager(this);
@@ -55,7 +57,7 @@ public final class Waystonez extends JavaPlugin
     public void registerLang(TranslationStore.StringBased<MessageFormat> tStore) {
         for (Locale lang : SUPPORTED_LANGUAGES) {
             ResourceBundle bundle = ResourceBundle.getBundle("waystonez.Bundle", lang, UTF8ResourceBundleControl.get());
-            tStore.registerAll(lang, bundle, true);
+            tStore.registerAll(lang, bundle, false);
         }
     }
 

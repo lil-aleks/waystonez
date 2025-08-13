@@ -115,8 +115,7 @@ public class WaystoneBlock extends CustomItemHandler
             }
         }
 
-        assert WaystoneDialogs.NAME_INPUT != null;
-        event.getPlayer().showDialog(WaystoneDialogs.NAME_INPUT);
+        event.getPlayer().showDialog(WaystoneDialogs.nameInputDialog());
     }
 
     @Override
