@@ -59,7 +59,7 @@ public class WaystoneBlock extends CustomItemHandler
                     return;
                 if (!Waystonez.databaseManager.playerHasWaystone(event.getPlayer().getUniqueId().toString(), waystone.get().getId()))
                 {
-                    event.getPlayer().sendMessage(Component.text("You discovered ").color(NamedTextColor.GREEN).append(Component.text(waystone.get().getName()).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.YELLOW)).append(Component.text(".").color(NamedTextColor.GREEN)));
+                    event.getPlayer().sendMessage(Component.translatable("waystone.discovered", NamedTextColor.GREEN, Component.text(waystone.get().getName()).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.YELLOW)));
                     Waystonez.databaseManager.addDiscoveredWaystone(event.getPlayer().getUniqueId().toString(), waystone.get().getId());
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
@@ -102,7 +102,7 @@ public class WaystoneBlock extends CustomItemHandler
         {
             if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
             {
-                event.getPlayer().sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                event.getPlayer().sendMessage(Component.translatable("waystone.limit_reached", NamedTextColor.DARK_RED));
                 event.setCancelled(true);
                 return;
             }

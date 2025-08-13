@@ -46,7 +46,7 @@ public class NameInputMenu extends WaystoneMenu
         final ItemStack nameItem = new ItemStack(Material.PAPER);
         final ItemMeta itemMeta = nameItem.getItemMeta();
         itemMeta.setDisplayName("§9Rename Waypoint");
-        itemMeta.displayName(Component.text("Rename Waypoint").color(NamedTextColor.BLUE));
+        itemMeta.displayName(Component.translatable("inventory.name_waypoint", NamedTextColor.BLUE));
         nameItem.setItemMeta(itemMeta);
         setItem(4, nameItem, player ->
         {
@@ -54,7 +54,7 @@ public class NameInputMenu extends WaystoneMenu
 
             BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () ->
             {
-                player.sendMessage(Component.newline().appendNewline().appendNewline().appendNewline().append(Component.text("Type the name for your waystone in chat: (Sneak to cancel)").color(NamedTextColor.RED)));
+                player.sendMessage(Component.newline().appendNewline().appendNewline().appendNewline().append(Component.translatable("waystone.choose_name", NamedTextColor.RED)));
             }, 0, 60);
             Bukkit.getPluginManager().registerEvents(new Listener()
             {
@@ -67,7 +67,7 @@ public class NameInputMenu extends WaystoneMenu
                     if (maxWaystones != 0) {
                         if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
                         {
-                            event.getPlayer().sendMessage(Component.text("The server has reached the max amount of waystones.").color(NamedTextColor.DARK_RED));
+                            event.getPlayer().sendMessage(Component.translatable("waystone.limit_reached", NamedTextColor.DARK_RED));
                             block.getWorld().dropItemNaturally(block.getLocation(), WaystoneBlock.ITEM_STACK);
                             block.setType(Material.AIR);
                             HandlerList.unregisterAll(this);
@@ -76,7 +76,7 @@ public class NameInputMenu extends WaystoneMenu
                     }
                     String name = event.getMessage();
                     Waystonez.databaseManager.saveWaystone(new Waystone(name, block.getLocation(), player.getUniqueId().toString()));
-                    player.sendMessage(Component.text("You named your waytone: ").color(NamedTextColor.GREEN).append(Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
+                    player.sendMessage(Component.translatable("waystone.named", NamedTextColor.GREEN, Component.text(name).decorate(TextDecoration.UNDERLINED).color(NamedTextColor.GOLD)));
                     player.playSound(event.getPlayer().getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 0.5f);
                     player.playSound(event.getPlayer().getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 0.5f);
                     player.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 0.5, 0.5), 50, 0.5, 0.5, 0.5, 0.5);

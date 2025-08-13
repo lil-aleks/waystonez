@@ -15,6 +15,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomItemEventHandler implements Listener
 {
@@ -22,6 +23,10 @@ public class CustomItemEventHandler implements Listener
 
     public CustomItemEventHandler(JavaPlugin plugin, CustomItemHandler... handler)
     {
+        handler = Arrays.stream(handler)
+                    .filter(Objects::nonNull)
+                    .toArray(CustomItemHandler[]::new);
+
         customItemHandlers = handler;
         for (CustomItemHandler item : customItemHandlers)
         {
