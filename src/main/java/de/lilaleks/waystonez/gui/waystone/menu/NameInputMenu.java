@@ -45,8 +45,7 @@ public class NameInputMenu extends WaystoneMenu
     {
         final ItemStack nameItem = new ItemStack(Material.PAPER);
         final ItemMeta itemMeta = nameItem.getItemMeta();
-        itemMeta.setDisplayName("§9Rename Waypoint");
-        itemMeta.displayName(Component.translatable("inventory.name_waypoint", NamedTextColor.BLUE));
+        itemMeta.displayName(Component.text("Waystone", NamedTextColor.BLUE));
         nameItem.setItemMeta(itemMeta);
         setItem(4, nameItem, player ->
         {
