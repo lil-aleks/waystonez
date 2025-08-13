@@ -24,7 +24,7 @@ public class CustomItemEventHandler implements Listener
     public CustomItemEventHandler(JavaPlugin plugin, CustomItemHandler... handler)
     {
         handler = Arrays.stream(handler)
-            .filter(Objects::nonNull)      // filtert alle null raus
+            .filter(Objects::nonNull)
             .toArray(CustomItemHandler[]::new);
 
         customItemHandlers = handler;
