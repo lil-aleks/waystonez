@@ -34,7 +34,6 @@ public final class Waystonez extends JavaPlugin
         TranslationStore.StringBased<MessageFormat> tStore = TranslationStore.messageFormat(Key.key("waystonez:messages"));
         registerLang(tStore);
         GlobalTranslator.translator().addSource(tStore);
-        getLogger().info(String.valueOf(GlobalTranslator.translator().canTranslate("dialog.teleport_question", Locale.US)));
 
         // Connect with database
         databaseManager = new DatabaseManager(this);
