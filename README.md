@@ -1,27 +1,19 @@
-# Waystonez
-
-Waystonez is a simple Minecraft plugin which adds waystones to your minecraft world.
-Perfect for survival worlds.
-
+<h1>
+  <p align="center">Waystonez</p>
+  <div align="left">
+    <a href="https://discord.gg/MD7dQgscej">
+      <img src="https://img.shields.io/discord/1269661250464387264?style=flat&label=Discord&labelColor=404040&color=%235865F2" alt="discord">
+    </a>
+    <a href="https://www.spigotmc.org/resources/waystonez.127850/">
+      <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcorsproxy.io%2F%3Furl%3Dhttps%3A%2F%2Fapi.spiget.org%2Fv2%2Fresources%2F127850&query=downloads&suffix=%20downloads&logo=spigotMc&label=%20&labelColor=404040&color=d18b00" alt="spigot">
+    </a>
+    <a href="https://github.com/lil-aleks/waystonez/blob/master/LICENSE">
+      <img src="https://img.shields.io/github/license/lil-aleks/waystonez?style=flat&color=900c3f" alt="License">
+    </a>
+</h1>
+<p align="center">Waystonez is a simple Minecraft plugin which adds waystones to your minecraft world. Perfect for survival worlds.</p>
+    
 [Little demo on YouTube](https://www.youtube.com/watch?v=yfyEgQNSMNE)
-
-## Features
-
-- Craft, place waystones and give them names.
-- Craft and carry a wand which can be used to teleport to other waystones.
-- Every player (except the placer) has to right-click a waystone to discover it.
-- Endless waystones on your server.
-
-<p align="center">
-<img src="https://github.com/user-attachments/assets/a1da786c-6b0d-4a04-af39-63ddf7bad787" height="150" alt="waystone crafting recepie"/>
-<img src="https://github.com/user-attachments/assets/9c801e6d-d5f4-4463-9c26-bf8eb1b97d4d" height="150" alt="waystone wand crafting recepie"/>
-</p>
-
-### Upcomming Features
-
-- Teleportation requires xp (optional in config).
-- Waystone limit (optional in config)
-- Even more customizable features in the config.
 
 Requests for some features can be done on my [discord server](https://discord.gg/MD7dQgscej).
 
