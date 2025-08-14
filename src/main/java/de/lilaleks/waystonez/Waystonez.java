@@ -24,6 +24,7 @@ public final class Waystonez extends JavaPlugin
     public static List<Locale> SUPPORTED_LANGUAGES = new ArrayList<>(){{
         add(Locale.US);
         add(Locale.GERMANY);
+        add(Locale.of("es", "MX"));
     }};
 
     @Override
