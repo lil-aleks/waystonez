@@ -84,7 +84,7 @@ public class WaystoneWand extends CustomItemHandler
             int finalUses = uses;
             event.getItem().editMeta(itemMeta ->
                     {
-                        itemMeta.lore(List.of(Component.text(max_uses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
+                        itemMeta.lore(List.of(Component.text(finalUses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
                         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
                     }
             );
