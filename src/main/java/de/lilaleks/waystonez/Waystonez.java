@@ -27,6 +27,7 @@ public final class Waystonez extends JavaPlugin
         add(Locale.US);
         add(Locale.GERMANY);
         add(Locale.of("es", "MX"));
+        add(Locale.of("pt", "BR"));
     }};
 
     @Override
