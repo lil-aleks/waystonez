@@ -64,29 +64,36 @@ public class WaystoneDialogs
 
     public static Dialog teleportDialog(Player player)
     {
-        List<ActionButton> inputs = new ArrayList<>();
-        DialogBase.Builder dialogBase = DialogBase.builder(Component.text("Waystonez").color(NamedTextColor.DARK_PURPLE));
-
-        for (Waystone waystone : Waystonez.databaseManager.getPlayerWaystones(player.getUniqueId().toString()))
+        try
         {
+            List<ActionButton> inputs = new ArrayList<>();
+            DialogBase.Builder dialogBase = DialogBase.builder(Component.text("Waystonez").color(NamedTextColor.DARK_PURPLE));
 
-            // Component.text(waystone.getName()).color(NamedTextColor.GOLD)
-            // Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()).color(NamedTextColor.DARK_BLUE);
+            for (Waystone waystone : Waystonez.databaseManager.getPlayerWaystones(player.getUniqueId().toString()))
+            {
 
-            inputs.add(
-                    ActionButton.builder(Component.text(waystone.getName()).color(NamedTextColor.GOLD))
-                            .tooltip(Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()).color(NamedTextColor.DARK_BLUE))
-                            .action(DialogAction.customClick(Key.key("waystonez:teleport/" + waystone.getId()), null))
-                            .build()
+                // Component.text(waystone.getName()).color(NamedTextColor.GOLD)
+                // Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()).color(NamedTextColor.DARK_BLUE);
+
+                inputs.add(
+                        ActionButton.builder(Component.text(waystone.getName()).color(NamedTextColor.GOLD))
+                                .tooltip(Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()).color(NamedTextColor.DARK_BLUE))
+                                .action(DialogAction.customClick(Key.key("waystonez:teleport/" + waystone.getId()), null))
+                                .build()
+                );
+            }
+
+            return Dialog.create(builder -> builder.empty()
+                    .base(dialogBase.body(List.of(
+                            DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
+                            DialogBody.plainMessage(Component.translatable("dialog.teleport_question", "Where do you want to teleport to?"))
+                    )).build())
+                    .type(DialogType.multiAction(inputs).build())
             );
+        } catch (Exception e)
+        {
+            Waystonez.LOGGER.info(e.getMessage());
+            return null;
         }
-
-        return Dialog.create(builder -> builder.empty()
-                .base(dialogBase.body(List.of(
-                        DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
-                        DialogBody.plainMessage(Component.translatable("dialog.teleport_question", "Where do you want to teleport to?"))
-                )).build())
-                .type(DialogType.multiAction(inputs).build())
-        );
     }
 }
