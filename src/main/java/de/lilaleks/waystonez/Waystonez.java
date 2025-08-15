@@ -1,5 +1,6 @@
 package de.lilaleks.waystonez;
 
+import de.lilaleks.waystonez.commands.ItemCommand;
 import de.lilaleks.waystonez.custom.block.WaystoneBlock;
 import de.lilaleks.waystonez.custom.item.WaystoneWand;
 import de.lilaleks.waystonez.database.DatabaseManager;
@@ -37,6 +38,9 @@ public final class Waystonez extends JavaPlugin
 
         databaseManager = new DatabaseManager(this);
         databaseManager.initialize();
+
+        registerCommand("waystonez", new ItemCommand());
+
         getServer().getPluginManager().registerEvents(new CustomItemEventHandler(this,
                 new WaystoneBlock(this),
                 (this.getConfig().getInt("wand_uses", 5) != 0 ? new WaystoneWand(this) : null)

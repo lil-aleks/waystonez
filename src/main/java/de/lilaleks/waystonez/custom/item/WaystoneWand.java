@@ -35,7 +35,7 @@ public class WaystoneWand extends CustomItemHandler
         itemMeta.displayName(Component.text("Waystone Wand").color(NamedTextColor.LIGHT_PURPLE));
         itemMeta.setCustomModelData(714);
         itemMeta.setItemModel(NamespacedKey.minecraft("amethyst_shard"));
-        itemMeta.lore(List.of(Component.translatable("waystone_wand.uses_left", NamedTextColor.GRAY, Set.of(TextDecoration.BOLD), Component.text(max_uses), Component.text(max_uses))));
+        itemMeta.lore(List.of(Component.text(max_uses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(plugin, "uses");
 
@@ -84,7 +84,7 @@ public class WaystoneWand extends CustomItemHandler
             int finalUses = uses;
             event.getItem().editMeta(itemMeta ->
                     {
-                        itemMeta.lore(List.of(Component.translatable("waystone_wand.uses_left", NamedTextColor.GRAY, Set.of(TextDecoration.BOLD), Component.text(finalUses), Component.text(max_uses))));
+                        itemMeta.lore(List.of(Component.text(max_uses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
                         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
                     }
             );

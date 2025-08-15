@@ -1,5 +1,5 @@
 name: Waystonez
-version: '1.21.x-1.3'
+version: '1.21.x-1.4'
 main: de.lilaleks.waystonez.Waystonez
 api-version: '1.21'
 authors: ['lil_Aleks']
