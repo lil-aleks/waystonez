@@ -63,7 +63,8 @@ public class NameInputMenu extends WaystoneMenu
                     if (event.getPlayer() != player)
                         return;
                     event.setCancelled(true);
-                    if (maxWaystones != 0) {
+                    if (maxWaystones != 0)
+                    {
                         if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
                         {
                             event.getPlayer().sendMessage(Component.translatable("waystone.limit_reached", NamedTextColor.DARK_RED));
@@ -80,6 +81,21 @@ public class NameInputMenu extends WaystoneMenu
                     player.playSound(event.getPlayer().getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 0.5f);
                     player.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 0.5, 0.5), 50, 0.5, 0.5, 0.5, 0.5);
                     player.getWorld().spawnParticle(Particle.END_ROD, block.getLocation().add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5, 0.1);
+
+                    boolean discoveryRequired = plugin.getConfig().getBoolean("discovery_required", true);
+
+                    if (!discoveryRequired)
+                    {
+                        int id = Waystonez.databaseManager.getWaystoneAtLocation(block.getLocation()).get().getId();
+                        Bukkit.getOnlinePlayers().forEach(p ->
+                        {
+                            if (p != player)
+                            {
+                                Waystonez.databaseManager.addDiscoveredWaystone(p.getUniqueId().toString(), id);
+                            }
+                        });
+                    }
+
                     task.cancel();
                     HandlerList.unregisterAll(this);
                 }

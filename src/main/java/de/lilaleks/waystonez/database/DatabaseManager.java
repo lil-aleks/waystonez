@@ -97,6 +97,28 @@ public class DatabaseManager
         }
     }
 
+    public List<Waystone> getAllWaystones()
+    {
+        List<Waystone> waystones = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM waystones"))
+        {
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                while (resultSet.next())
+                {
+                    waystones.add(resultSetToWaystone(resultSet));
+                }
+            }
+        } catch (SQLException e)
+        {
+            plugin.getLogger().severe("Error getting player waystones: " + e.getMessage());
+        }
+
+        return waystones;
+    }
+
     public void saveWaystone(Waystone waystone)
     {
         try (PreparedStatement statement = connection.prepareStatement(
@@ -151,7 +173,8 @@ public class DatabaseManager
                 ResultSet resultSet = statement.executeQuery()
         )
         {
-            if (resultSet.next()){
+            if (resultSet.next())
+            {
                 return resultSet.getInt(1);
             }
         } catch (SQLException e)

@@ -17,12 +17,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Named;
+import java.util.List;
 import java.util.Optional;
 
 public class WaystoneBlock extends CustomItemHandler
@@ -42,6 +44,8 @@ public class WaystoneBlock extends CustomItemHandler
         itemMeta.setCustomModelData(714);
         item.setItemMeta(itemMeta);
         ITEM_STACK = item;
+
+        boolean discoveryRequired = plugin.getConfig().getBoolean("discovery_required", true);
 
         plugin.getServer().getPluginManager().registerEvents(new Listener()
         {
@@ -66,6 +70,19 @@ public class WaystoneBlock extends CustomItemHandler
                 } else
                 {
                     new TeleportMenu(event.getPlayer()).open(event.getPlayer());
+                }
+            }
+
+            @EventHandler
+            public void onJoin(PlayerJoinEvent event)
+            {
+                if (!discoveryRequired)
+                {
+                    List<Waystone> waystones = Waystonez.databaseManager.getAllWaystones();
+                    for (Waystone waystone : waystones)
+                    {
+                        Waystonez.databaseManager.addDiscoveredWaystone(event.getPlayer().getUniqueId().toString(), waystone.getId());
+                    }
                 }
             }
         }, plugin);

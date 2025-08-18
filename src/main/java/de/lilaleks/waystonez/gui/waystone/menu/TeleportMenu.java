@@ -1,6 +1,7 @@
 package de.lilaleks.waystonez.gui.waystone.menu;
 
 import de.lilaleks.waystonez.Waystonez;
+import de.lilaleks.waystonez.custom.item.WaystoneWand;
 import de.lilaleks.waystonez.gui.waystone.WaystoneMenu;
 import de.lilaleks.waystonez.model.Waystone;
 import net.kyori.adventure.text.Component;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -36,6 +38,7 @@ public class TeleportMenu extends WaystoneMenu
             meta.lore(List.of(Component.text("X = " + waystone.getLocation().getX() + ", Y = " + waystone.getLocation().getY() + ", Z = " + waystone.getLocation().getZ()).color(NamedTextColor.DARK_BLUE)));
             item.setItemMeta(meta);
             setItem(slot, item, clicker -> {
+                WaystoneWand.setTeleportResult(player, true);
                 clicker.closeInventory();
                 clicker.teleport(waystone.getLocation().add(0.5,1,0.5));
                 clicker.playSound(clicker.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 0.8f);
@@ -45,5 +48,11 @@ public class TeleportMenu extends WaystoneMenu
             });
             slot++;
         }
+    }
+
+    @Override
+    public void close(InventoryCloseEvent event)
+    {
+        WaystoneWand.setTeleportResult(player, false);
     }
 }

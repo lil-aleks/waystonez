@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -16,13 +17,18 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class WaystoneWand extends CustomItemHandler
 {
     public final JavaPlugin plugin;
     public static ItemStack ITEM_STACK = null;
+    private static final Map<Player, CompletableFuture<Boolean>> awaitingResponse = new HashMap<>();
+
     private int max_uses;
 
     public WaystoneWand(JavaPlugin plugin)
@@ -74,21 +80,36 @@ public class WaystoneWand extends CustomItemHandler
         event.setCancelled(true);
         NamespacedKey key = new NamespacedKey(plugin, "uses");
         int uses = event.getItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
-        uses--;
-        if (uses == 0)
-        {
-            event.getPlayer().getInventory().remove(event.getItem());
-            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 0.6f, 0.8f);
-        } else
-        {
-            int finalUses = uses;
-            event.getItem().editMeta(itemMeta ->
-                    {
-                        itemMeta.lore(List.of(Component.text(finalUses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
-                        itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
-                    }
-            );
-        }
+        CompletableFuture<Boolean> respone = new CompletableFuture<>();
+        awaitingResponse.put(event.getPlayer(), respone);
         new TeleportMenu(event.getPlayer()).open(event.getPlayer());
+        if (respone.join())
+        {
+            uses--;
+            if (uses == 0)
+            {
+                event.getPlayer().getInventory().remove(event.getItem());
+                event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 0.6f, 0.8f);
+            } else
+            {
+                int finalUses = uses;
+                event.getItem().editMeta(itemMeta ->
+                        {
+                            itemMeta.lore(List.of(Component.text(finalUses + "/" + max_uses, NamedTextColor.GRAY, Set.of(TextDecoration.BOLD))));
+                            itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, finalUses);
+                        }
+                );
+            }
+        }
+        awaitingResponse.remove(event.getPlayer());
+    }
+
+    public static void setTeleportResult(Player player, boolean result)
+    {
+        CompletableFuture<Boolean> future = awaitingResponse.get(player);
+        if (future != null)
+        {
+            future.complete(result);
+        }
     }
 }
