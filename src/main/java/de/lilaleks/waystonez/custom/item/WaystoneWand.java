@@ -79,12 +79,12 @@ public class WaystoneWand extends CustomItemHandler
     {
         event.setCancelled(true);
         NamespacedKey key = new NamespacedKey(plugin, "uses");
-        int uses = event.getItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
         CompletableFuture<Boolean> respone = new CompletableFuture<>();
         awaitingResponse.put(event.getPlayer(), respone);
         new TeleportMenu(event.getPlayer()).open(event.getPlayer());
-        if (respone.join())
+        respone.thenAccept(value ->
         {
+            int uses = event.getItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
             uses--;
             if (uses == 0)
             {
@@ -100,8 +100,8 @@ public class WaystoneWand extends CustomItemHandler
                         }
                 );
             }
-        }
-        awaitingResponse.remove(event.getPlayer());
+            awaitingResponse.remove(event.getPlayer());
+        });
     }
 
     public static void setTeleportResult(Player player, boolean result)
