@@ -2,6 +2,7 @@ package de.lilaleks.waystonez.event;
 
 import de.lilaleks.waystonez.Waystonez;
 import de.lilaleks.waystonez.custom.block.WaystoneBlock;
+import de.lilaleks.waystonez.custom.item.WaystoneWand;
 import de.lilaleks.waystonez.model.Waystone;
 import io.papermc.paper.connection.PlayerGameConnection;
 import io.papermc.paper.dialog.DialogResponseView;
@@ -10,6 +11,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -64,6 +66,19 @@ public class DialogEvents implements Listener
                 player.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 0.5, 0.5), 50, 0.5, 0.5, 0.5, 0.5);
                 player.getWorld().spawnParticle(Particle.END_ROD, block.getLocation().add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5, 0.1);
 
+                boolean discoveryRequired = plugin.getConfig().getBoolean("discovery_required", true);
+
+                if (!discoveryRequired)
+                {
+                    int id = Waystonez.databaseManager.getWaystoneAtLocation(block.getLocation()).get().getId();
+                    Bukkit.getOnlinePlayers().forEach(p ->
+                    {
+                        if (p != player)
+                        {
+                            Waystonez.databaseManager.addDiscoveredWaystone(p.getUniqueId().toString(), id);
+                        }
+                    });
+                }
             }
         } else if (event.getIdentifier().equals(Key.key("waystonez:name_input/cancel")))
         {
@@ -90,10 +105,17 @@ public class DialogEvents implements Listener
                     player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.1f, 1.5f);
                     player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0), 50, 0.5, 1, 0.5, 0.1);
                     player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation().add(0, 1, 0), 20, 0.5, 1, 0.5, 0.05);
+                    WaystoneWand.setTeleportResult(player, true);
                 }
 
             }
 
+        } else if (event.getIdentifier().key().asString().equals("waystonez:cancel_teleport"))
+        {
+            if (event.getCommonConnection() instanceof PlayerGameConnection conn)
+            {
+                WaystoneWand.setTeleportResult(conn.getPlayer(), false);
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
-# how many times can you use a waystone wand before braking. 0 to disable usage; default: 5
+# how many times can you use a waystone wand before braking. 0 to disable usage; DEFAULT: 5
 wand_uses: 5
 
-# how many waystones are allowed in your world. 0 for unlimited; default: 0
+# how many waystones are allowed in your world. 0 for unlimited; DEFAULT: 0
 max_waystones: 0
+
+# does a player has to discorver a waystone before using. false if not; DEFAULT: true
+discovery_required: true

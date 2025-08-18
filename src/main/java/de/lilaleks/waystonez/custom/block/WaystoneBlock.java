@@ -5,9 +5,6 @@ import de.lilaleks.waystonez.custom.CustomItemHandler;
 import de.lilaleks.waystonez.model.Waystone;
 import de.lilaleks.waystonez.util.WaystoneDialogs;
 import io.papermc.paper.dialog.Dialog;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -20,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -34,6 +32,7 @@ public class WaystoneBlock extends CustomItemHandler
     public final JavaPlugin plugin;
     public static ItemStack ITEM_STACK = null;
     private int maxWaystones;
+    private boolean discoveryRequired;
 
     public WaystoneBlock(JavaPlugin plugin)
     {
@@ -47,6 +46,9 @@ public class WaystoneBlock extends CustomItemHandler
         itemMeta.setCustomModelDataComponent(comp);
         item.setItemMeta(itemMeta);
         ITEM_STACK = item;
+
+        maxWaystones = plugin.getConfig().getInt("max_waystones", 0);
+        discoveryRequired = plugin.getConfig().getBoolean("discovery_required", true);
 
         plugin.getServer().getPluginManager().registerEvents(new Listener()
         {
@@ -74,9 +76,21 @@ public class WaystoneBlock extends CustomItemHandler
                     event.getPlayer().showDialog(dialog);
                 }
             }
-        }, plugin);
 
-        maxWaystones = plugin.getConfig().getInt("max_waystones", 0);
+            @EventHandler
+            public void onJoin(PlayerJoinEvent event)
+            {
+                if (!discoveryRequired)
+                {
+                    List<Waystone> waystones = Waystonez.databaseManager.getAllWaystones();
+                    for (Waystone waystone : waystones)
+                    {
+                        Waystonez.databaseManager.addDiscoveredWaystone(event.getPlayer().getUniqueId().toString(), waystone.getId());
+                    }
+                }
+            }
+
+        }, plugin);
     }
 
     @Override
@@ -106,7 +120,8 @@ public class WaystoneBlock extends CustomItemHandler
     @Override
     public void onPlace(BlockPlaceEvent event)
     {
-        if (maxWaystones != 0) {
+        if (maxWaystones != 0)
+        {
             if (Waystonez.databaseManager.getWaystoneCount() >= maxWaystones)
             {
                 event.getPlayer().sendMessage(Component.translatable("waystone.limit_reached", NamedTextColor.DARK_RED));

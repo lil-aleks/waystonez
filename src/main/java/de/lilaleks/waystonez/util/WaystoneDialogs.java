@@ -88,7 +88,11 @@ public class WaystoneDialogs
                             DialogBody.item(ItemStack.of(Material.LODESTONE)).build(),
                             DialogBody.plainMessage(Component.translatable("dialog.teleport_question", "Where do you want to teleport to?"))
                     )).build())
-                    .type(DialogType.multiAction(inputs).build())
+                    .type(DialogType.multiAction(inputs).exitAction(
+                            ActionButton.builder(Component.translatable("dialog.waystone_name.cancel", "Cancel"))
+                                    .action(DialogAction.customClick(Key.key("waystonez:cancel_teleport"), null))
+                                    .build()
+                    ).build())
             );
         } catch (Exception e)
         {

@@ -4,14 +4,10 @@ import de.lilaleks.waystonez.custom.block.WaystoneBlock;
 import de.lilaleks.waystonez.custom.item.WaystoneWand;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,22 +27,31 @@ public class ItemCommand implements BasicCommand
 
         if (args.length == 0)
         {
-            player.sendMessage("Usage: /waystonez [waystone|wand]");
+            player.sendMessage("Usage: /waystonez [waystone|wand] <player>");
             return;
+        }
+
+        Player target = player;
+        if (args.length == 2) {
+            target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                player.sendMessage("Player not found");
+                return;
+            }
         }
 
         switch (args[0].toLowerCase())
         {
             case "waystone":
-                player.give(WaystoneBlock.ITEM_STACK);
+                target.give(WaystoneBlock.ITEM_STACK);
                 break;
 
             case "wand":
-                player.give(WaystoneWand.ITEM_STACK);
+                target.give(WaystoneWand.ITEM_STACK);
                 break;
 
             default:
-                player.sendMessage("Usage: /waystonez [waystone|wand]");
+                player.sendMessage("Usage: /waystonez [waystone|wand] <player>");
                 break;
         }
     }
@@ -59,6 +64,8 @@ public class ItemCommand implements BasicCommand
         {
             list.add("waystone");
             list.add("wand");
+        } else if (args.length == 1) {
+            Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
         }
         return list;
     }
