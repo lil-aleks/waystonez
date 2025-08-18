@@ -63,7 +63,7 @@ public class ItemCommand implements BasicCommand
         {
             list.add("waystone");
             list.add("wand");
-        } else if (args.length == 1) {
+        } else if (args.length == 2) {
             Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
         }
         return list;
